@@ -1,0 +1,4 @@
+{
+  "serverPort": 5001,
+  "dbUrl": "mongodb+srv://user:user@cluster0.fp2be.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+}
