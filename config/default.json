@@ -1,5 +1,7 @@
 {
   "serverPort": 5001,
   "dbUrl": "mongodb+srv://user:user@cluster0.fp2be.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  "secretKey": "ng-todo-secret-key"
+  "secretKey": "ng-todo-secret-key",
+  "JWT_ACCESS_SECRET": "ng-todo-jwt-access-secret-key",
+  "JWT_REFRESH_SECRET": "ng-todo-jwt-refresh-secret-key"
 }
