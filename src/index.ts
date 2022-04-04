@@ -1,10 +1,11 @@
-import config from 'config';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import express, { Express } from 'express';
-import mongoose from 'mongoose';
+import config from "config";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Express } from "express";
+import mongoose from "mongoose";
+import errorMiddleware from "./middlewares/error-middleware";
 
-import router from './routes';
+import router from "./routes";
 
 const PORT: number = config.get("serverPort");
 const DB_URL: string = config.get("dbUrl");
@@ -15,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use("/api", router);
-// app.use(errorMiddleware);
+app.use(errorMiddleware);
 
 const startServer = (): void => {
   try {

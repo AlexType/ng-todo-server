@@ -1,7 +1,8 @@
-import { Router } from "express";
-import { body, check } from "express-validator";
+import { Router } from 'express';
+import { body } from 'express-validator';
 
-import userController from "../controllers/user-controller";
+import userController from '../controllers/user-controller';
+import authMiddleware from '../middlewares/auth-middleware';
 
 const router: Router = Router();
 
@@ -17,6 +18,6 @@ router.post(
 router.post("/login", userController.login);
 router.post("/logout", userController.logout);
 router.get("/refresh", userController.refresh);
-router.get("/users", userController.getUsers);
+router.get("/users", authMiddleware, userController.getUsers);
 
 export default router;
