@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
-import UserDto from '../dtos/user-dto';
-import UserSchema from '../models/user-model';
-import tokenService from './token-service';
+import UserDto from "../dtos/user-dto";
+import UserSchema from "../models/user-model";
+import tokenService from "./token-service";
 
 class UserService {
   async registration(
@@ -55,6 +55,12 @@ class UserService {
       ...tokens,
       user: userDto,
     };
+  }
+
+  async logout(refreshToken: string) {
+    const token = tokenService.removeToken(refreshToken);
+
+    return token;
   }
 }
 

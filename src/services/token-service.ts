@@ -5,8 +5,12 @@ import TokenSchema from '../models/token-model';
 
 class TokenService {
   generateTokens(payload: any) {
-    const accessToken = jwt.sign(payload, config.get('JWT_ACCESS_SECRET'), { expiresIn: '30m' });
-    const refreshToken = jwt.sign(payload, config.get('JWT_REFRESH_SECRET'), { expiresIn: '30d' });
+    const accessToken = jwt.sign(payload, config.get("JWT_ACCESS_SECRET"), {
+      expiresIn: "30m",
+    });
+    const refreshToken = jwt.sign(payload, config.get("JWT_REFRESH_SECRET"), {
+      expiresIn: "30d",
+    });
 
     return {
       accessToken,
@@ -24,6 +28,12 @@ class TokenService {
 
     const token = await TokenSchema.create({ user: userId, refreshToken });
     return token;
+  }
+
+  async removeToken(refreshToken: string) {
+    const tokenData = await TokenSchema.deleteOne({ refreshToken });
+
+    return tokenData;
   }
 }
 
