@@ -16,6 +16,7 @@ class UserController {
       }
 
       const { email, password, firstName, lastName } = req.body;
+
       const userData = await userService.registration(
         email,
         password,
@@ -36,7 +37,18 @@ class UserController {
 
   async login(req: any, res: any, next: any) {
     try {
-    } catch (error) {}
+      const { email, password } = req.body;
+      const userData = await userService.login(email, password);
+
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+
+      return res.json(userData);
+    } catch (error: any) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
   }
 
   async logout(req: any, res: any, next: any) {
