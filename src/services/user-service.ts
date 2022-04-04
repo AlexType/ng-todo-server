@@ -1,11 +1,16 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
-import UserDto from '../dtos/user-dto';
-import UserSchema from '../models/user-model';
-import tokenService from './token-service';
+import UserDto from "../dtos/user-dto";
+import UserSchema from "../models/user-model";
+import tokenService from "./token-service";
 
 class UserService {
-  async registration(email: string, password: string, firstName: string, lastName: string) {
+  async registration(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) {
     const candidate = await UserSchema.findOne({ email });
 
     if (candidate) {
@@ -13,7 +18,12 @@ class UserService {
     }
 
     const hasPassword = await bcrypt.hash(password, 8);
-    const user = await UserSchema.create({ email, password: hasPassword, firstName, lastName });
+    const user = await UserSchema.create({
+      email,
+      password: hasPassword,
+      firstName,
+      lastName,
+    });
 
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
