@@ -62,6 +62,29 @@ class UserService {
 
     return token;
   }
+
+  async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw new Error("Пользователь не авторизован");
+    }
+
+    const userData: any = tokenService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await tokenService.findToken(refreshToken);
+
+    if (!userData || !tokenFromDb) {
+      throw new Error("Пользователь не авторизован");
+    }
+
+    const user = await UserSchema.findById(userData.id);
+    const userDto = new UserDto(user);
+    const tokens = tokenService.generateTokens({ ...userDto });
+    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+    return {
+      ...tokens,
+      user: userDto,
+    };
+  }
 }
 
 export default new UserService();

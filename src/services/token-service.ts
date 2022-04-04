@@ -1,7 +1,7 @@
-import config from 'config';
-import jwt from 'jsonwebtoken';
+import config from "config";
+import jwt from "jsonwebtoken";
 
-import TokenSchema from '../models/token-model';
+import TokenSchema from "../models/token-model";
 
 class TokenService {
   generateTokens(payload: any) {
@@ -18,6 +18,27 @@ class TokenService {
     };
   }
 
+  validateAccessToken(token: string) {
+    try {
+      const userData = jwt.verify(token, config.get("JWT_ACCESS_SECRET"));
+      return userData;
+    } catch (error: any) {
+      return null;
+    }
+  }
+
+  validateRefreshToken(refreshToken: string) {
+    try {
+      const userData = jwt.verify(
+        refreshToken,
+        config.get("JWT_REFRESH_SECRET")
+      );
+      return userData;
+    } catch (error: any) {
+      return null;
+    }
+  }
+
   async saveToken(userId: string, refreshToken: string) {
     const tokenData = await TokenSchema.findOne({ user: userId });
 
@@ -32,6 +53,12 @@ class TokenService {
 
   async removeToken(refreshToken: string) {
     const tokenData = await TokenSchema.deleteOne({ refreshToken });
+
+    return tokenData;
+  }
+
+  async findToken(refreshToken: string) {
+    const tokenData = await TokenSchema.findOne({ refreshToken });
 
     return tokenData;
   }
