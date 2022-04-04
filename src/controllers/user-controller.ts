@@ -1,12 +1,29 @@
-import userService from '../services/user-service';
+import { validationResult } from "express-validator";
+
+import userService from "../services/user-service";
 
 class UserController {
   async registration(req: any, res: any, next: any) {
     try {
-      const { email, password, firstName, lastName } = req.body;
-      const userData = await userService.registration(email, password, firstName, lastName);
+      const errors = validationResult(req);
 
-      res.cookie('refreshToken', userData.refreshToken, {
+      if (!errors.isEmpty()) {
+        return res.json({
+          success: false,
+          message: "Ошибка валидации",
+          errors: errors.array(),
+        });
+      }
+
+      const { email, password, firstName, lastName } = req.body;
+      const userData = await userService.registration(
+        email,
+        password,
+        firstName,
+        lastName
+      );
+
+      res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
@@ -34,7 +51,7 @@ class UserController {
 
   async getUsers(req: any, res: any, next: any) {
     try {
-      res.json(['123', '456']);
+      res.json(["123", "456"]);
     } catch (error) {}
   }
 }
